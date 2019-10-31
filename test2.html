@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CT的FR</title>
+		<script src="../d3.v4.min.js"></script>
+		<script src="test2.js"></script>
+	</head>
+	<body>
+		<canvas width="960" height="600"></canvas>
+	</body>
+	<script>
+	var canvas = document.querySelector("canvas"),
+		context = canvas.getContext("2d"),
+		width = canvas.width,
+		height = canvas.height;
+	d3.json("test.json", function(error, graph) {
+		console.log(graph);
+		if (error) throw error;
+		myFr(graph);
+	});	
+	
+	function ticked() {
+		  context.clearRect(0, 0, width, height);
+		
+		  context.beginPath();
+		  graph.links.forEach(drawLink);
+		  context.strokeStyle = "#aaa";
+		  context.stroke();
+		
+		  context.beginPath();
+		  graph.nodes.forEach(drawNode);
+		  context.fill();
+		  context.strokeStyle = "#123456";
+		  context.stroke();
+		}
+	function drawLink(d) {
+		// console.log(d);
+	  context.moveTo(d.source.x, d.source.y);
+	  context.lineTo(d.target.x, d.target.y);
+	}
+	
+	function drawNode(d) {
+		// console.log(d.x);
+		// 把路径移动到画布中的指定点，不创建线条
+	  context.moveTo(d.x + 3, d.y);
+		// canvas画圆
+	  context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+	}	
+	</script>
+</html>
