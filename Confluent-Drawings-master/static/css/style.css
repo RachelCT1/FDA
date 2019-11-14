@@ -1,0 +1,47 @@
+.links line {
+    stroke: red;
+    stroke-width: 1px;
+}
+
+.invisible {
+    stroke: red;
+    stroke-width: 0px;
+}
+
+.confs path {
+    stroke: green;
+    fill: none;
+    stroke-width: 1px;
+}
+
+.nodes circle {
+    pointer-events: all;
+    stroke: none;
+    stroke-width: 40px;
+}
+
+/* unvisited link */
+a:link {
+    text-decoration: none;
+    color: red;
+}
+
+/* visited link */
+a:visited {
+    color: green;
+}
+
+/* mouse over link */
+a:hover {
+    color: hotpink;
+}
+
+/* selected link */
+a:active {
+    color: blue;
+}
+
+/* Center the figures */
+figure {
+    text-align: center;
+}
