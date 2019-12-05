@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>social network use d3-force</title>
+    <script src="//unpkg.com/3d-force-graph"></script>
+</head>
+<body>
+<div id="3dgraph"></div>
+<script>
+    // 向数组添加不重复节点
+    Array.prototype.pushNoRepeat = function(){
+        for(var i=0; i<arguments.length; i++){
+            var ele = arguments[i];
+            if(this.indexOf(ele) == -1){
+               this.push(ele);
+            }
+        }
+    };
+
+    (function(url) {
+        //先声明一个异步请求对象
+        let xmlHttp;
+        if (window.ActiveXObject) {//如果是IE
+            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        else if (window.XMLHttpRequest) {
+            xmlHttp = new XMLHttpRequest(); //实例化一个xmlHttp
+        }
+        //如果实例化成功,就调用open()方法,就开始准备向服务器发送请求
+        if (xmlHttp != null) {
+            xmlHttp.open("get",url, true);
+            xmlHttp.send(null);
+            xmlHttp.onreadystatechange = doResult; //设置回调函数
+        }
+        //回调函数
+        //一旦readyState的值改变,将会调用这个函数,readyState=4表示完成相应
+        //设定函数doResult()
+        function doResult() {
+            if (xmlHttp.readyState === 4) {//4代表执行完成
+                if (xmlHttp.status === 200) {//200代表执行成功
+                    //将xmlHttp.responseText的值赋给ID为resText的元素
+                    //console.log(JSON.parse(xmlHttp.responseText));
+                    ready(JSON.parse(xmlHttp.responseText));
+                }
+            }
+        }
+    })('../data/facebook_cut12000.json');
+    function ready(data){
+        var data2 = [];
+        console.log(data[1])
+        // data2.pushNoRepeat(data.target);
+        data.nodes = [];
+        data2.nodes = [];
+        // 遍历出边的所有source和target节点
+        data.map((d,i)=>{
+            data.nodes.pushNoRepeat(d.source);
+            data.nodes.pushNoRepeat(d.target);
+        });
+        // 给每个节点增加id属性和name属性
+        data.nodes.forEach(d=>{
+            // console.log(d);
+            data2.nodes.push({
+                id: d,
+                name: d
+            });
+        });
+        console.log(data2);
+        //给我来12000条边进行渲染
+        data2.links = data.splice(0,12000);
+        console.log(data);
+        //这里用myGraph就不行，用Graph就行，这里因为我是调用的3d-force库，所以还有好多东西没搞懂
+        // const myGraph = ForceGraph3D({ controlType: 'orbit' });
+        const Graph = ForceGraph3D({ controlType: 'orbit' })
+        (document.getElementById("3dgraph"))
+                 .graphData(data2);
+    }
+
+
+
+
+</script>
+</body>
+</html>
